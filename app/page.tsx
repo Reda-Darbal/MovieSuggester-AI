@@ -72,7 +72,7 @@ export default function HomePage() {
         &copy; {new Date().getFullYear()} MovieSuggester. All rights reserved.
         <div className="flex justify-center mt-4 space-x-4">
           <a
-            href="https://github.com"
+            href="https://github.com/Reda-Darbal/MovieSuggester-AI"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
