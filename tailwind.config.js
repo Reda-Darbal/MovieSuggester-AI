@@ -9,11 +9,26 @@ module.exports = {
     extend: {
       colors: {
         'blue-600': '#2563EB',
-        'blue-400': '#60A5FA',
-        'yellow-500': '#F59E0B',
+        'blue-500': '#3B82F6',
       },
-      fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+      animation: {
+        'gradient': 'gradient 15s ease infinite',
+        'fade-in-down': 'fade-in-down 1s ease-out',
+        'fade-in-up': 'fade-in-up 1s ease-out',
+      },
+      keyframes: {
+        gradient: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        'fade-in-down': {
+          'from': { opacity: '0', transform: 'translateY(-20px)' },
+          'to': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'fade-in-up': {
+          'from': { opacity: '0', transform: 'translateY(20px)' },
+          'to': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
     },
   },

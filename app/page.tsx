@@ -68,7 +68,7 @@ export default function HomePage() {
         )}
       </main>
 
-      <footer className="mt-auto py-8 text-center text-sm text-gray-500">
+      <footer className="mt-auto py-8 text-center text-sm text-gray-500 bg-gray-50">
         &copy; {new Date().getFullYear()} MovieSuggester. All rights reserved.
         <div className="flex justify-center mt-4 space-x-4">
           <a
@@ -76,7 +76,7 @@ export default function HomePage() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="p-2 bg-gray-200 rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-300 transition"
+            className="p-2 bg-gray-200 rounded-full text-gray-500 hover:text-white hover:bg-gray-800 transition"
           >
             <FaGithub size={20} />
           </a>
@@ -85,7 +85,7 @@ export default function HomePage() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="X"
-            className="p-2 bg-gray-200 rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-300 transition"
+            className="p-2 bg-gray-200 rounded-full text-gray-500 hover:text-white hover:bg-gray-800 transition"
           >
             <XIcon />
           </a>
