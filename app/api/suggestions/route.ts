@@ -38,7 +38,7 @@ Do not include anything other than the JSON array in your response.
     }
 
     return NextResponse.json({ suggestions });
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
     return NextResponse.json({ error: 'Failed to fetch suggestions.' }, { status: 500 });
   }
