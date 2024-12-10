@@ -1,7 +1,12 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from '@clerk/nextjs';
 
 export default function Header() {
   return (
@@ -28,18 +33,44 @@ export default function Header() {
                 Sign In
               </button>
             </SignInButton>
-            {/* <SignUpButton mode="modal">
-              <button className="px-4 py-2 bg-white text-blue-600 rounded-md hover:bg-gray-100 transition">
-                Sign Up
-              </button>
-            </SignUpButton> */}
           </SignedOut>
           <SignedIn>
-            <UserButton 
+            <UserButton
               afterSignOutUrl="/"
               appearance={{
-                elements:{
-                  userButtonAvatarBox: 'w-10 h-10',
+                
+                variables: {
+                  borderRadius: '0.5rem',
+                },
+                elements: {
+                  // Style the container of the entire dropdown
+                  card: 'bg-white shadow-xl rounded-xl border-0 bg-gradient-to-t from-blue-100 to-white',
+
+                  // Style the user info section
+                  userPreviewMainIdentifier: 'text-gray-900 font-semibold',
+                  userPreviewSecondaryIdentifier: 'text-gray-500',
+
+                  // Style the avatar
+                  avatarBox: 'w-10 h-10',
+
+                  // Style the menu items (Sign Out and Settings)
+                  userButtonPopoverActionButton:
+                    'hover:bg-blue-50 text-blue-600 px-4 py-2 w-full text-left',
+                  userButtonPopoverActionButtonText: 'font-medium text-blue-600', // Ensures text is blue
+                  userButtonPopoverActionButtonIcon: 'text-blue-600', // Ensures icons are blue
+
+                  // Hide the footer link
+                  userButtonPopoverFooter: 'hidden',
+
+                  // Style individual buttons
+                  userPreviewAvatarBox: 'border-2 border-blue-100',
+
+                  // Style the main section and actions
+                  userButtonPopoverMain: 'p-2',
+                  userButtonPopoverActions: 'space-y-1',
+
+                  // Hide development mode badge
+                  badge: 'hidden',
                 },
               }}
             />
