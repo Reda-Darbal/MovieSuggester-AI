@@ -24,7 +24,7 @@ html, body {
   }
 }
 
-/* Fade In Animations */
+
 @keyframes fade-in-down {
   from {
     opacity: 0;
