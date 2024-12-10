@@ -14,8 +14,8 @@ type Suggestion = {
   title: string;
   type: string;
   description: string;
+  imageUrl: string | null;
 };
-
 export default function HomePage() {
   const [suggestions, setSuggestions] = useState<Suggestion[] | null>(null);
   const [loading, setLoading] = useState(false);
