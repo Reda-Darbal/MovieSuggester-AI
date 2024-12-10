@@ -1,10 +1,68 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getAuth } from '@clerk/nextjs/server';
+import { clerkClient } from '@clerk/clerk-sdk-node';
 import { openai } from '../../lib/openai';
 import axios from 'axios';
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 
+function getWeekStartDate(date: Date): Date {
+  const dayOfWeek = date.getDay();
+  const daysSinceMonday = (dayOfWeek + 6) % 7;
+  const weekStart = new Date(date);
+  weekStart.setDate(date.getDate() - daysSinceMonday);
+  weekStart.setHours(0, 0, 0, 0);
+  return weekStart;
+}
+
 export async function POST(req: NextRequest) {
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const user = await clerkClient.users.getUser(userId);
+
+  if (!user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 });
+  }
+
+  // Get the current usage data from privateMetadata
+  let usageData = user.privateMetadata.usageData as {
+    count: number;
+    weekStart: number;
+  } | null;
+
+  const now = new Date();
+  const currentWeekStart = getWeekStartDate(now).getTime();
+
+  if (!usageData || usageData.weekStart !== currentWeekStart) {
+    // Reset usage data for a new week
+    usageData = {
+      count: 0,
+      weekStart: currentWeekStart,
+    };
+  }
+
+  if (usageData.count >= 3) {
+    return NextResponse.json(
+      { error: 'You have reached the weekly limit of 3 generations.' },
+      { status: 403 }
+    );
+  }
+
+  // Increment the usage count
+  usageData.count += 1;
+
+  // Update the user's privateMetadata with the new usage data
+  await clerkClient.users.updateUser(userId, {
+    privateMetadata: {
+      ...user.privateMetadata,
+      usageData,
+    },
+  });
+
   const { preferences, isSeries } = await req.json();
 
   if (!preferences || preferences.trim().length === 0) {
@@ -58,14 +116,14 @@ export async function POST(req: NextRequest) {
           if (imagePath) {
             suggestion.imageUrl = `https://image.tmdb.org/t/p/w500${imagePath}`;
           } else {
-            suggestion.imageUrl = null; // No image available
+            suggestion.imageUrl = null;
           }
         } else {
-          suggestion.imageUrl = null; // No results found
+          suggestion.imageUrl = null;
         }
       } catch (error) {
         console.error(`Failed to fetch image for ${suggestion.title}:`, error);
-        suggestion.imageUrl = null; // Error occurred
+        suggestion.imageUrl = null;
       }
     }
 

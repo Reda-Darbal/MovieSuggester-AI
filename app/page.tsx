@@ -1,4 +1,3 @@
-
 'use client'
 import { useState } from 'react';
 import Head from 'next/head';
@@ -9,6 +8,7 @@ import SuggestionCard from './components/SuggestionCard';
 import './globals.css';
 import { FaGithub } from 'react-icons/fa';
 import XIcon from './components/XIcon';
+import { SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/nextjs';
 
 type Suggestion = {
   title: string;
@@ -16,27 +16,33 @@ type Suggestion = {
   description: string;
   imageUrl: string | null;
 };
+
 export default function HomePage() {
   const [suggestions, setSuggestions] = useState<Suggestion[] | null>(null);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const getSuggestions = async (preferences: string, isSeries: boolean) => {
     setLoading(true);
     setSuggestions(null);
+    setErrorMessage(null);
     try {
       const res = await fetch('/api/suggestions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ preferences, isSeries }),
+        credentials: 'include',
       });
       const data = await res.json();
       if (res.ok && data.suggestions) {
         setSuggestions(data.suggestions);
       } else {
+        setErrorMessage(data.error || 'An error occurred.');
         setSuggestions([]);
       }
     } catch (error) {
       console.error(error);
+      setErrorMessage('An error occurred.');
       setSuggestions([]);
     } finally {
       setLoading(false);
@@ -50,22 +56,52 @@ export default function HomePage() {
         <meta name="description" content="Get recommendations for movies and series you’ll love" />
       </Head>
       <Header />
-      <HeroSection onSearch={getSuggestions} loading={loading} />
 
-      <main className="max-w-5xl mx-auto px-4 py-10">
-        {loading ? (
-          <LoadingSpinner />
-        ) : suggestions && suggestions.length > 0 ? (
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {suggestions.map((suggestion, i) => (
-              <SuggestionCard key={i} suggestion={suggestion} />
-            ))}
+      <main className="w-full mx-auto px-4 py-10 bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600 shadow-sm animate-gradient">
+        <SignedIn>
+          <HeroSection onSearch={getSuggestions} loading={loading} />
+
+          {loading && <LoadingSpinner />}
+
+          {errorMessage && (
+            <div className="text-center text-red-600">{errorMessage}</div>
+          )}
+
+          {suggestions && suggestions.length > 0 && (
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8">
+              {suggestions.map((suggestion, i) => (
+                <SuggestionCard key={i} suggestion={suggestion} />
+              ))}
+            </div>
+          )}
+
+          {suggestions && suggestions.length === 0 && !loading && (
+            <div className="text-center text-gray-600 mt-8">
+              No suggestions found. Try different preferences.
+            </div>
+          )}
+        </SignedIn>
+
+        <SignedOut>
+          <div className="text-center text-gray-100 mt-20">
+            <h2 className="text-3xl font-bold mb-4">Welcome to MovieSuggester!</h2>
+            <p className="mb-6">
+              Please sign in to get personalized movie and series recommendations.
+            </p>
+            <div className="flex justify-center space-x-4">
+              <SignInButton mode="modal">
+                <button className="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition">
+                  Sign In
+                </button>
+              </SignInButton>
+              {/* <SignUpButton mode="modal">
+                <button className="px-6 py-3 bg-gray-300 text-gray-800 font-medium rounded-md hover:bg-gray-400 transition">
+                  Sign Up
+                </button>
+              </SignUpButton> */}
+            </div>
           </div>
-        ) : suggestions && suggestions.length === 0 ? (
-          <div className="text-center text-gray-600">No suggestions found. Try different preferences.</div>
-        ) : (
-          <div className="text-center text-gray-500 italic">Enter preferences above to get suggestions.</div>
-        )}
+        </SignedOut>
       </main>
 
       <footer className="mt-auto py-8 text-center text-sm text-gray-500 bg-gray-50">

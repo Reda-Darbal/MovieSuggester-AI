@@ -19,7 +19,7 @@ export default function HeroSection({ onSearch, loading }: Props) {
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center text-center py-20 px-4 w-full bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600 shadow-sm animate-gradient">
+    <div className="relative flex flex-col items-center justify-center text-center py-20 px-4 w-full">
       <h1 className="text-5xl font-extrabold mb-4 text-white drop-shadow-lg animate-fade-in-down">
         Find Your Next Favorite Movie or Series
       </h1>
