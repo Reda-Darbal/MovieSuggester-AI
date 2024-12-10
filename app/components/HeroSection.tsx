@@ -46,26 +46,24 @@ export default function HeroSection({ onSearch, loading }: Props) {
         </button>
       </form>
 
-      <div className="flex items-center space-x-4 mt-6 z-10 animate-fade-in-up">
-        <span className={`text-lg ${isSeries ? "font-bold text-blue-100" : "text-gray-300"}`}>
-          Series
-        </span>
-        <button
-          onClick={handleToggle}
-          className={`relative w-12 h-6 bg-gray-400 rounded-full focus:outline-none transition-colors duration-300 ${
-            isSeries ? "bg-blue-300" : "bg-gray-500"
-          }`}
-        >
-          <span
-            className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
-              isSeries ? "translate-x-6" : ""
-            }`}
-          />
-        </button>
-        <span className={`text-lg ${!isSeries ? "font-bold text-blue-100" : "text-gray-300"}`}>
-          Movies
-        </span>
-      </div>
+      <div className="flex items-center justify-center space-x-0 mt-6 z-10 animate-fade-in-up">
+  <button
+    onClick={() => setIsSeries(true)}
+    className={`px-6 py-2 rounded-l-md ${
+      isSeries ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+    }`}
+  >
+    Series
+  </button>
+  <button
+    onClick={() => setIsSeries(false)}
+    className={`px-6 py-2 rounded-r-md ${
+      !isSeries ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+    }`}
+  >
+    Movies
+  </button>
+</div>
     </div>
   );
 }
