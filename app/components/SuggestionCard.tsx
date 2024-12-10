@@ -1,4 +1,4 @@
-// components/SuggestionCard.tsx
+
 
 type Suggestion = {
     title: string;

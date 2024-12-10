@@ -10,9 +10,7 @@ export default function HeroSection({ onSearch, loading }: Props) {
   const [input, setInput] = useState('');
   const [isSeries, setIsSeries] = useState(true);
 
-  const handleToggle = () => {
-    setIsSeries(!isSeries);
-  };
+  
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

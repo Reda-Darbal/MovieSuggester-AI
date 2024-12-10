@@ -1,4 +1,4 @@
-// components/LoadingSpinner.tsx
+
 export default function LoadingSpinner() {
     return (
       <div className="flex items-center justify-center py-10">
