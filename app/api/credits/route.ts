@@ -24,6 +24,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
+  // Get maxCredits from privateMetadata, default to 3
+  const maxCredits = (user.privateMetadata.maxCredits as number) || 3;
+
   // Get the current usage data from privateMetadata
   let usageData = user.privateMetadata.usageData as {
     count: number;
@@ -32,7 +35,6 @@ export async function GET(req: NextRequest) {
 
   const now = new Date();
   const currentWeekStart = getWeekStartDate(now).getTime();
-  const maxCredits = 3;
 
   if (!usageData || usageData.weekStart !== currentWeekStart) {
     // Reset usage data for a new week
@@ -51,5 +53,5 @@ export async function GET(req: NextRequest) {
 
   const creditsLeft = maxCredits - (usageData.count || 0);
 
-  return NextResponse.json({ creditsLeft });
+  return NextResponse.json({ creditsLeft, maxCredits });
 } 

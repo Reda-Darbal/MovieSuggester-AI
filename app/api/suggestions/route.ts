@@ -28,6 +28,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
+  // Get maxCredits from privateMetadata, default to 3
+  const maxCredits = (user.privateMetadata.maxCredits as number) || 3;
+
   // Get the current usage data from privateMetadata
   let usageData = user.privateMetadata.usageData as {
     count: number;
@@ -45,9 +48,9 @@ export async function POST(req: NextRequest) {
     };
   }
 
-  if (usageData.count >= 3) {
+  if (usageData.count >= maxCredits) {
     return NextResponse.json(
-      { error: 'You have reached the weekly limit of 3 generations.' },
+      { error: `You have reached the weekly limit of ${maxCredits} generations.` },
       { status: 403 }
     );
   }

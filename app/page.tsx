@@ -22,6 +22,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [creditsLeft, setCreditsLeft] = useState<number | null>(null);
+  const [maxCredits, setMaxCredits] = useState<number | null>(null);
   const { isLoaded, isSignedIn } = useAuth();
 
   const fetchCredits = async () => {
@@ -33,6 +34,7 @@ export default function HomePage() {
       const data = await res.json();
       if (res.ok) {
         setCreditsLeft(data.creditsLeft);
+        setMaxCredits(data.maxCredits);
       } else {
         console.error(data.error);
       }
@@ -82,7 +84,7 @@ export default function HomePage() {
         <title>Movies & Series Suggester</title>
         <meta name="description" content="Get recommendations for movies and series you’ll love" />
       </Head>
-      <Header creditsLeft={creditsLeft} />
+      <Header creditsLeft={creditsLeft} maxCredits={maxCredits} />
 
       <main className="w-full mx-auto px-4 py-10 bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600 shadow-sm animate-gradient">
         <SignedIn>

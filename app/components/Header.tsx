@@ -10,7 +10,7 @@ import {
   useAuth,
 } from '@clerk/nextjs';
 
-export default function Header({ creditsLeft }: { creditsLeft: number | null }) {
+export default function Header({ creditsLeft, maxCredits }: { creditsLeft: number | null, maxCredits: number | null }) {
   return (
     <header className="w-full bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600 shadow-sm animate-gradient">
       <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -37,9 +37,9 @@ export default function Header({ creditsLeft }: { creditsLeft: number | null }) 
             </SignInButton>
           </SignedOut>
           <SignedIn>
-            {creditsLeft !== null && (
-              <span className="text-white font-medium mr-0">
-                Credits: {creditsLeft}
+            {creditsLeft !== null && maxCredits !== null && (
+              <span className="text-white font-medium mr-4">
+                Credits: {creditsLeft} / {maxCredits}
               </span>
             )}
             <UserButton
