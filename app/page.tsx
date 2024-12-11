@@ -65,7 +65,7 @@ export default function HomePage() {
 
           <div className="flex items-center justify-center h-full">
   {errorMessage && (
-    <div className="text-center rounded-lg w-96 bg-red-300 border-red-500 text-red-600 opacity-75 ">
+    <div className="text-center rounded-lg w-96 bg-red-300 border-red-500 text-red-600 opacity-85 ">
       {errorMessage}
     </div>
   )}
@@ -80,8 +80,10 @@ export default function HomePage() {
           )}
 
           {suggestions && suggestions.length === 0 && !loading && !errorMessage && (
-            <div className="text-center text-gray-600 mt-8">
-              No suggestions found. Try different preferences.
+            <div className="flex items-center justify-center">
+              <div className="text-center flex items-center justify-center rounded-lg w-96 bg-gray-600 border-gray-300 opacity-90 text-gray-50">
+                No suggestions found. Try different preferences.
+              </div>
             </div>
           )}
         </SignedIn>
