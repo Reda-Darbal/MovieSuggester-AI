@@ -38,12 +38,12 @@ export default function HomePage() {
         setSuggestions(data.suggestions);
       } else {
         setErrorMessage(data.error || 'An error occurred.');
-        setSuggestions([]);
+        setSuggestions(null);
       }
     } catch (error) {
       console.error(error);
       setErrorMessage('An error occurred.');
-      setSuggestions([]);
+      setSuggestions(null);
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>Movie & Series Suggester</title>
+        <title>Movies & Series Suggester</title>
         <meta name="description" content="Get recommendations for movies and series you’ll love" />
       </Head>
       <Header />
@@ -63,9 +63,13 @@ export default function HomePage() {
 
           {loading && <LoadingSpinner />}
 
-          {errorMessage && (
-            <div className="text-center text-red-600">{errorMessage}</div>
-          )}
+          <div className="flex items-center justify-center h-full">
+  {errorMessage && (
+    <div className="text-center rounded-lg w-96 bg-red-300 border-red-500 text-red-600 opacity-75 ">
+      {errorMessage}
+    </div>
+  )}
+</div>
 
           {suggestions && suggestions.length > 0 && (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8">
@@ -75,7 +79,7 @@ export default function HomePage() {
             </div>
           )}
 
-          {suggestions && suggestions.length === 0 && !loading && (
+          {suggestions && suggestions.length === 0 && !loading && !errorMessage && (
             <div className="text-center text-gray-600 mt-8">
               No suggestions found. Try different preferences.
             </div>
