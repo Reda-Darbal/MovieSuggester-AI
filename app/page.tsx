@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
@@ -8,7 +8,7 @@ import SuggestionCard from './components/SuggestionCard';
 import './globals.css';
 import { FaGithub } from 'react-icons/fa';
 import XIcon from './components/XIcon';
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/nextjs';
+import { SignedIn, SignedOut, useAuth, SignInButton } from '@clerk/nextjs';
 
 type Suggestion = {
   title: string;
@@ -21,6 +21,31 @@ export default function HomePage() {
   const [suggestions, setSuggestions] = useState<Suggestion[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [creditsLeft, setCreditsLeft] = useState<number | null>(null);
+  const { isLoaded, isSignedIn } = useAuth();
+
+  const fetchCredits = async () => {
+    try {
+      const res = await fetch('/api/credits', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setCreditsLeft(data.creditsLeft);
+      } else {
+        console.error(data.error);
+      }
+    } catch (error) {
+      console.error('Failed to fetch credits:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      fetchCredits();
+    }
+  }, [isLoaded, isSignedIn]);
 
   const getSuggestions = async (preferences: string, isSeries: boolean) => {
     setLoading(true);
@@ -36,6 +61,8 @@ export default function HomePage() {
       const data = await res.json();
       if (res.ok && data.suggestions) {
         setSuggestions(data.suggestions);
+        // Fetch updated credits after successful generation
+        await fetchCredits();
       } else {
         setErrorMessage(data.error || 'An error occurred.');
         setSuggestions(null);
@@ -55,7 +82,7 @@ export default function HomePage() {
         <title>Movies & Series Suggester</title>
         <meta name="description" content="Get recommendations for movies and series you’ll love" />
       </Head>
-      <Header />
+      <Header creditsLeft={creditsLeft} />
 
       <main className="w-full mx-auto px-4 py-10 bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600 shadow-sm animate-gradient">
         <SignedIn>
@@ -64,12 +91,12 @@ export default function HomePage() {
           {loading && <LoadingSpinner />}
 
           <div className="flex items-center justify-center h-full">
-  {errorMessage && (
-    <div className="text-center rounded-lg w-96 bg-red-300 border-red-500 text-red-600 opacity-85 ">
-      {errorMessage}
-    </div>
-  )}
-</div>
+            {errorMessage && (
+              <div className="text-center rounded-lg w-96 bg-red-300 border-red-500 text-red-600 opacity-85 ">
+                {errorMessage}
+              </div>
+            )}
+          </div>
 
           {suggestions && suggestions.length > 0 && (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8">
@@ -100,11 +127,6 @@ export default function HomePage() {
                   Sign In
                 </button>
               </SignInButton>
-              {/* <SignUpButton mode="modal">
-                <button className="px-6 py-3 bg-gray-300 text-gray-800 font-medium rounded-md hover:bg-gray-400 transition">
-                  Sign Up
-                </button>
-              </SignUpButton> */}
             </div>
           </div>
         </SignedOut>
