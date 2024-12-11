@@ -38,8 +38,11 @@ export default function Header({ creditsLeft, maxCredits }: { creditsLeft: numbe
           </SignedOut>
           <SignedIn>
             {creditsLeft !== null && maxCredits !== null && (
-              <span className="text-white font-medium mr-4">
-                Credits: {creditsLeft} / {maxCredits}
+              <span className="text-white font-medium mr-1">
+                {/* if want to add maxCredits :   
+                Credits: {creditsLeft} / {maxCredits} */}
+
+                Credits: {creditsLeft} 
               </span>
             )}
             <UserButton
