@@ -55,4 +55,80 @@ html, body {
   animation: fade-in-up 1s ease-out;
 }
 
+@keyframes animate-focus-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 4px rgba(0, 255, 0, 0.5);
+  }
+}
+
+.focus-ring-animation {
+  animation: animate-focus-ring 1s infinite alternate;
+}
+
+/* Custom keyframes for the colorful shadow animation */
+@keyframes focusGlow {
+  0% {
+    box-shadow: 0 0 10px 0 rgba(255, 0, 0, 0.8);
+  }
+  33% {
+    box-shadow: 0 0 10px 0 rgba(0, 255, 0, 0.8);
+  }
+  66% {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 10px 0 rgba(255, 0, 0, 0.8);
+  }
+}
+
+/* Custom class to apply the animation on focus */
+.focused-input-animation:focus {
+  animation: focusGlow 2s linear infinite;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.input-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -10px; /* Adjust based on the desired glow size */
+  left: -10px;
+  bottom: -10px;
+  right: calc(4rem + 10px); /* Adjust '4rem' to match the width of your button */
+  border-radius: inherit;
+  animation: focusGlow 2s linear infinite;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.input-wrapper input:focus + ::before {
+  opacity: 1;
+}
+
+.input-wrapper input:focus {
+  outline: none;
+}
+
+.input-wrapper input {
+  position: relative;
+  
+}
+
+.input-animation {
+  position: absolute;
+  right: 0; /* Position to the right side */
+  top: 0;
+  width: 50%; /* Adjust as needed */
+  height: 100%;
+  pointer-events: none; /* Allow clicks to pass through */
+  /* Apply your animation here */
+  animation: focusGlow 2s linear infinite;
+}
+
 

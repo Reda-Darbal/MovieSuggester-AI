@@ -12,9 +12,10 @@ module.exports = {
         'blue-500': '#3B82F6',
       },
       animation: {
-        'gradient': 'gradient 15s ease infinite',
+        gradient: 'gradient 15s ease infinite',
         'fade-in-down': 'fade-in-down 1s ease-out',
         'fade-in-up': 'fade-in-up 1s ease-out',
+        'gradient-border': 'gradient-border 5s linear infinite',
       },
       keyframes: {
         gradient: {
@@ -28,6 +29,14 @@ module.exports = {
         'fade-in-up': {
           'from': { opacity: '0', transform: 'translateY(20px)' },
           'to': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'gradient-border': {
+          '0%': {
+            backgroundPosition: '0% 50%',
+          },
+          '100%': {
+            backgroundPosition: '100% 50%',
+          },
         },
       },
     },
